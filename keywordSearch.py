@@ -1,3 +1,8 @@
+#------------------------------------------------------------------------------
+# Author: 	Joel Gurnett
+# Desc: 	find standings for keywords
+# Date:		October 18, 2020
+#------------------------------------------------------------------------------
 import getopt, sys
 from googleapi import google
 from openpyxl import load_workbook
@@ -8,7 +13,7 @@ def main(argv):
 	site = ""
 	standing = {}
 	try: 
-		opts, args = getopt.getopt(argv, "hi:s:", ["ifile=", "site="])
+		opts, args = getopt.getopt(argv, "hi:", ["ifile="])
 	except getopt.GetoptError:
 		sys.exit(2)
 	for opt, arg in opts:
@@ -18,12 +23,11 @@ def main(argv):
 		elif opt in ('-i', '--ifile'):
 			inputfile = arg
 			print('input file is: ' + inputfile)
-		elif opt in ('-s', '--site'):
-			site = arg
-			print('site file is: ' + site)
 	
 	workbook = load_workbook(filename="sample.xlsx")
 	sheet = workbook.active
+	site = sheet.title
+	
 	query = ""
 	file = open(inputfile, 'r')
 	Lines = file.readlines()
@@ -31,12 +35,10 @@ def main(argv):
 	col = 2
 	while sheet.cell(row=1, column=col).value != None:		
 		col = col + 1
-	sheet.cell(row=row-1, column=col).value = date.today().strftime("%Y/%m/%d") 
+	sheet.cell(row=row-1, column=col).value = date.today().strftime("%Y-%m-%d") 
 	
-	for line in Lines:
-		if '\n' in line:
-			query = line.replace("\n", "")
-
+	query = sheet.cell(row=row, column=1).value
+	while query != None:
 		numPage = 3
 		print("searching for: " + query + "...")
 		searchResults = google.search(query, numPage)
@@ -61,6 +63,8 @@ def main(argv):
 		if query not in standing:
 			sheet.cell(row=row, column=col).value = 'Not Found'
 			print('Query: ' + query + " not found!\n")
+		row = row + 1
+		query = sheet.cell(row=row, column=1).value
 
 	workbook.save(filename="sample.xlsx")
 
