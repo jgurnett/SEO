@@ -22,7 +22,10 @@ def main(argv):
 	for opt, arg in opts:
 		# display how to use the program
 		if opt == '-h':
-			print('you have reached the help menu')
+			print('you have reached the help menu:')
+			print('\t-h\tDisplay This menu')
+			print('\t-i\tSpecify file for input\n')
+			print('\tUsage: ./keywordSearch.py -i excel.xlsx')
 			sys.exit()
 
 		# display inputfile and save for later
