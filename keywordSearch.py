@@ -55,36 +55,37 @@ def main(argv):
 
 		# iterate through all keywords
 		while query != None:
-			numPage = 10
-			print("searching for: " + query + "...")
-			searchResults = google.search(query, numPage)
-			count = 0
+			if query != '-':
+				numPage = 10
+				print("searching for: " + query + "...")
+				searchResults = google.search(query, numPage)
+				count = 0
 
-			# find position of our keyword
-			for result in searchResults:
-				count = count + 1
-				try:
-					if site in result.link:
-						page = 1
-						position = count
-						if count > 9:
-							page = int(count / 10) + 1 
-							position = count % 10
+				# find position of our keyword
+				for result in searchResults:
+					count = count + 1
+					try:
+						if site in result.link:
+							page = 1
+							position = count
+							if count > 9:
+								page = int(count / 10) + 1 
+								position = count % 10
 
-						# add postition to excel sheet
-						sheet.cell(row=row, column=col).value = count
-						standing[query] = "Page: " + str(page) + " position: " + str(position)
+							# add postition to excel sheet
+							sheet.cell(row=row, column=col).value = count
+							standing[query] = "Page: " + str(page) + " position: " + str(position)
 
-						# display standing in terminal window
-						print(standing[query] + "\n")
-						break
-				except:
-					print("error!")
+							# display standing in terminal window
+							print(standing[query] + "\n")
+							break
+					except:
+						print("error!")
 
-			# display not found if keyword isn't in top 10 pages
-			if query not in standing:
-				sheet.cell(row=row, column=col).value = 'Not Found'
-				print('Query: ' + query + " not found!\n")
+				# display not found if keyword isn't in top 10 pages
+				if query not in standing:
+					sheet.cell(row=row, column=col).value = 'Not Found'
+					print('Query: ' + query + " not found!\n")
 			row = row + 1
 
 			# get next keyword
