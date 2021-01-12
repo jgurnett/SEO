@@ -1,5 +1,5 @@
 # SEO
-I used too keep track of SEO rankings
+ITo keep track of SEO rankings
 
 ## Dependencies 
 * openpyxl
