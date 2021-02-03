@@ -70,7 +70,7 @@ def main(argv):
 				for count, result in enumerate(searchResults):
 					count =+ 1
 					try:
-						if site in result.link:
+						if site in result:
 							page = 1
 							position = count
 							if count > 9:
