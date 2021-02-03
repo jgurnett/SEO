@@ -67,8 +67,8 @@ def main(argv):
 				searchResults = search(query, stop=100, country=countryCode, num=10, pause=2.0)
 
 				# find position of our keyword
-				for count, result in enumerate(searchResults):
-					count =+ 1
+				for i, result in enumerate(searchResults):
+					count = i + 1
 					try:
 						if site in result:
 							page = 1
