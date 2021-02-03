@@ -5,7 +5,7 @@
 # Date:		October 18, 2020
 #------------------------------------------------------------------------------
 import getopt, sys
-from googleapi import google
+from googlesearch import search
 from openpyxl import load_workbook
 from datetime import date
 
@@ -39,6 +39,7 @@ def main(argv):
 		workbook = load_workbook(filename=inputfile)
 		sheet = workbook.active
 		site = sheet.title
+		countryCode = sheet.cell(row=1, column=1).value
 		
 		query = ""
 		file = open(inputfile, 'r')
@@ -58,12 +59,11 @@ def main(argv):
 			if query != '-':
 				numPage = 10
 				print("searching for: " + query + "...")
-				searchResults = google.search(query, numPage)
-				count = 0
+				searchResults = search(query, stop=100, country=countryCode, num=10, pause=2.0)
 
 				# find position of our keyword
-				for result in searchResults:
-					count = count + 1
+				for count, result in enumerate(searchResults):
+					count =+ 1
 					try:
 						if site in result.link:
 							page = 1
