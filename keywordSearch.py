@@ -59,6 +59,11 @@ def main(argv):
 			if query != '-':
 				numPage = 10
 				print("searching for: " + query + "...")
+				
+				# stop: search 10 pages 
+				# countryCode: which contry to search
+				# num: 10 results per page 
+				# pause: wait 2 seconds every 10 results to prevent getting banned
 				searchResults = search(query, stop=100, country=countryCode, num=10, pause=2.0)
 
 				# find position of our keyword
