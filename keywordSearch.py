@@ -59,38 +59,45 @@ def main(argv):
 			if query != '-':
 				numPage = 10
 				print("searching for: " + query + "...")
-				
-				# stop: search 10 pages 
-				# countryCode: which contry to search
-				# num: 10 results per page 
-				# pause: wait 2 seconds every 10 results to prevent getting banned
-				searchResults = search(query, stop=100, country=countryCode, num=10, pause=2.0)
+				try:
+					# stop: search 10 pages 
+					# countryCode: which contry to search
+					# num: 10 results per page 
+					# pause: wait 2 seconds every 10 results to prevent getting banned
+					searchResults = search(query, stop=100, country=countryCode, num=10, pause=2.0)
 
-				# find position of our keyword
-				for i, result in enumerate(searchResults):
-					count = i + 1
-					try:
-						if site in result:
-							page = 1
-							position = count
-							if count > 9:
-								page = int(count / 10) + 1 
-								position = count % 10
+					# find position of our keyword
+					for i, result in enumerate(searchResults):
+						count = i + 1
+						try:
+							if site in result:
+								page = 1
+								position = count
+								if count > 9:
+									page = int(count / 10) + 1 
+									position = count % 10
 
-							# add postition to excel sheet
-							sheet.cell(row=row, column=col).value = count
-							standing[query] = "Page: " + str(page) + " position: " + str(position)
+								# add postition to excel sheet
+								sheet.cell(row=row, column=col).value = count
+								standing[query] = "Page: " + str(page) + " position: " + str(position)
 
-							# display standing in terminal window
-							print(standing[query] + "\n")
-							break
-					except:
-						print("error!")
+								# display standing in terminal window
+								print(standing[query] + "\n")
+								break
+						except:
+							print("error!")
 
-				# display not found if keyword isn't in top 10 pages
-				if query not in standing:
-					sheet.cell(row=row, column=col).value = 'Not Found'
-					print('Query: ' + query + " not found!\n")
+					# display not found if keyword isn't in top 10 pages
+					if query not in standing:
+						sheet.cell(row=row, column=col).value = 'Not Found'
+						print('Query: ' + query + " not found!\n")
+				except:
+					print("\nYou have made too many requests!!!")
+					print("Saving current requests...")
+					workbook.save(filename=inputfile)
+					time.sleep(3)
+					print("\nResults saved! please try again later")
+					quit()
 			row = row + 1
 
 			# get next keyword
